@@ -1,21 +1,46 @@
 const video = document.getElementById("video");
+const seriesList = document.getElementById("seriesList");
 const episodeList = document.getElementById("episodeList");
+const seriesTitle = document.getElementById("seriesTitle");
 const resumeBtn = document.getElementById("resumeBtn");
-
-const episodes = [
-    { id: "ep1", name: "Episode 1", file: "media/Season1/episode1.mp4" },
-    { id: "ep2", name: "Episode 2", file: "media/Season1/episode2.mp4" }
-];
 
 let currentEpisode = null;
 
-// Liste anzeigen
-episodes.forEach(ep => {
+// Hier deine Serien definieren
+const data = {
+    "Dress Up Darling": [
+        { id: "dress_ep1", name: "Episode 1", file: "media/DressUp/ep1.mp4" },
+        { id: "dress_ep2", name: "Episode 2", file: "media/DressUp/ep2.mp4" }
+    ],
+    "Another Series": [
+        { id: "another_ep1", name: "Episode 1", file: "media/AnotherSeries/ep1.mp4" },
+        { id: "another_ep2", name: "Episode 2", file: "media/AnotherSeries/ep2.mp4" }
+    ]
+};
+
+// Serien anzeigen
+Object.keys(data).forEach(seriesName => {
     const div = document.createElement("div");
-    div.innerText = ep.name;
-    div.onclick = () => loadEpisode(ep);
-    episodeList.appendChild(div);
+    div.innerText = seriesName;
+    div.onclick = () => loadSeries(seriesName);
+    seriesList.appendChild(div);
 });
+
+function loadSeries(seriesName) {
+    episodeList.innerHTML = "";
+    seriesTitle.innerText = seriesName;
+
+    const episodes = data[seriesName];
+
+    episodes.forEach(ep => {
+        const div = document.createElement("div");
+        div.innerText = ep.name;
+
+        div.onclick = () => loadEpisode(ep);
+
+        episodeList.appendChild(div);
+    });
+}
 
 function loadEpisode(ep) {
     currentEpisode = ep;
