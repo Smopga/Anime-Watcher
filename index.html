@@ -1,31 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Streaming Portal</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Simple Streaming</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #111;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+select {
+    padding: 8px;
+    margin: 10px;
+    font-size: 16px;
+}
+
+video {
+    width: 80%;
+    max-width: 900px;
+    margin-top: 20px;
+    background: black;
+}
+</style>
 </head>
+
 <body>
 
-<div class="app">
+<h1>Mein Streaming</h1>
 
-    <div class="sidebar">
-        <h2>Serien</h2>
-        <div id="seriesList"></div>
-    </div>
+<div>
+    <label>Serie:</label>
+    <select id="seriesSelect"></select>
 
-    <div class="episodes">
-        <h2 id="seriesTitle">Serie auswählen</h2>
-        <div id="episodeList"></div>
-    </div>
-
-    <div class="player">
-        <video id="video" controls></video>
-        <button id="resumeBtn">Weiterschauen</button>
-    </div>
-
+    <label>Folge:</label>
+    <select id="episodeSelect"></select>
 </div>
 
-<script src="script.js"></script>
+<video id="video" controls></video>
+
+<script>
+const seriesData = {
+    "Dress Up Darling": [
+        { name: "Episode 1", file: "media/DressUp/ep1.mp4" },
+        { name: "Episode 2", file: "media/DressUp/ep2.mp4" }
+    ],
+    "Another Series": [
+        { name: "Episode 1", file: "media/AnotherSeries/ep1.mp4" },
+        { name: "Episode 2", file: "media/AnotherSeries/ep2.mp4" }
+    ]
+};
+
+const seriesSelect = document.getElementById("seriesSelect");
+const episodeSelect = document.getElementById("episodeSelect");
+const video = document.getElementById("video");
+
+// Serien laden
+for (let series in seriesData) {
+    let option = document.createElement("option");
+    option.value = series;
+    option.textContent = series;
+    seriesSelect.appendChild(option);
+}
+
+// Episoden laden
+function loadEpisodes(series) {
+    episodeSelect.innerHTML = "";
+
+    seriesData[series].forEach(ep => {
+        let option = document.createElement("option");
+        option.value = ep.file;
+        option.textContent = ep.name;
+        episodeSelect.appendChild(option);
+    });
+
+    video.src = seriesData[series][0].file;
+}
+
+seriesSelect.addEventListener("change", () => {
+    loadEpisodes(seriesSelect.value);
+});
+
+episodeSelect.addEventListener("change", () => {
+    video.src = episodeSelect.value;
+});
+
+// Erste Serie automatisch laden
+loadEpisodes(seriesSelect.value);
+</script>
+
 </body>
 </html>
