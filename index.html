@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Simple Streaming</title>
+<title>Auto Streaming</title>
 
 <style>
 body {
@@ -13,9 +13,7 @@ body {
     text-align: center;
 }
 
-h1 {
-    margin-top: 20px;
-}
+h1 { margin-top: 20px; }
 
 select {
     padding: 8px;
@@ -47,41 +45,38 @@ video {
 <video id="video" controls></video>
 
 <script>
-const seriesData = {
-    "Dress Up Darling": [
-        { name: "Episode 1", file: "media/DressUp/ep1.mp4" },
-        { name: "Episode 2", file: "media/DressUp/ep2.mp4" }
-    ],
-    "Another Series": [
-        { name: "Episode 1", file: "media/AnotherSeries/ep1.mp4" },
-        { name: "Episode 2", file: "media/AnotherSeries/ep2.mp4" }
-    ]
-};
-
 const seriesSelect = document.getElementById("seriesSelect");
 const episodeSelect = document.getElementById("episodeSelect");
 const video = document.getElementById("video");
 
-// Serien laden
-for (let series in seriesData) {
-    let option = document.createElement("option");
-    option.value = series;
-    option.textContent = series;
-    seriesSelect.appendChild(option);
-}
+let mediaData = {};
 
-// Episoden laden
+fetch("media.json")
+    .then(response => response.json())
+    .then(data => {
+        mediaData = data;
+
+        for (let series in mediaData) {
+            let option = document.createElement("option");
+            option.value = series;
+            option.textContent = series;
+            seriesSelect.appendChild(option);
+        }
+
+        loadEpisodes(seriesSelect.value);
+    });
+
 function loadEpisodes(series) {
     episodeSelect.innerHTML = "";
 
-    seriesData[series].forEach(ep => {
+    mediaData[series].forEach(file => {
         let option = document.createElement("option");
-        option.value = ep.file;
-        option.textContent = ep.name;
+        option.value = "media/" + series + "/" + file;
+        option.textContent = file.replace(".mp4", "");
         episodeSelect.appendChild(option);
     });
 
-    video.src = seriesData[series][0].file;
+    video.src = episodeSelect.value;
 }
 
 seriesSelect.addEventListener("change", () => {
@@ -91,9 +86,6 @@ seriesSelect.addEventListener("change", () => {
 episodeSelect.addEventListener("change", () => {
     video.src = episodeSelect.value;
 });
-
-// Erste Serie automatisch laden
-loadEpisodes(seriesSelect.value);
 </script>
 
 </body>
