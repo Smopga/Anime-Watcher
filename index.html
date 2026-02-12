@@ -7,15 +7,22 @@
 </head>
 <body>
 
-<h1>Meine Serie</h1>
+<h1>Mein Streaming Portal</h1>
 
-<div class="container">
-    <div class="sidebar" id="episodeList"></div>
+<div class="layout">
+
+    <div class="series-list" id="seriesList"></div>
+
+    <div class="episodes-section">
+        <h2 id="seriesTitle">Serie auswählen</h2>
+        <div id="episodeList"></div>
+    </div>
 
     <div class="player">
         <video id="video" controls></video>
         <button id="resumeBtn">Weiterschauen</button>
     </div>
+
 </div>
 
 <script src="script.js"></script>
